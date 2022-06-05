@@ -8,13 +8,13 @@ import { capitalCities } from "../locations";
 export const Locations = () => {
   const [cities, setCities] = useState([]);
   const [location, setLocation] = useState("");
-  const [cityOrder, setCityOrder] = useState("");
+  const [locationNumber, setLocationNumber] = useState("");
   const [result, setResult] = useState([]);
 
-  const mapResult = (cityOrder, location) => {
+  const mapResult = (locationNumber, location) => {
     //checken of het eerste teken een dollarteken is
     if (location.charAt(0) !== "$") {
-      return cityOrder;
+      return locationNumber;
     }
     location = location.slice(1);
     let country = Object.keys(capitalCities).find((key) =>
@@ -22,7 +22,7 @@ export const Locations = () => {
     );
     let result = {
       id: uuidv4(),
-      cityOrder: cityOrder,
+      locationNumber: locationNumber,
       country: country,
     };
 
@@ -32,7 +32,7 @@ export const Locations = () => {
   const convertResult = (updatedResult) => {
     console.log("test1", updatedResult);
     let updatedObject = updatedResult.reduce(
-      (json, item) => ({ ...json, [item.cityOrder]: item.country }),
+      (json, item) => ({ ...json, [item.locationNumber]: item.country }),
       {}
     );
     console.log("updateobj", updatedObject);
@@ -40,7 +40,7 @@ export const Locations = () => {
   const handleAddCity = (city) => {
     const updatedCities = [...cities, city];
     setCities(updatedCities);
-    const res = mapResult(cityOrder, location);
+    const res = mapResult(locationNumber, location);
     const updatedResult = [...result, res];
     console.log(updatedResult);
     convertResult(updatedResult);
@@ -48,7 +48,7 @@ export const Locations = () => {
   };
 
   const handleChangeKey = (e) => {
-    setCityOrder(e.target.value);
+    setLocationNumber(e.target.value);
   };
 
   const handleChangeValue = (e) => {
@@ -59,8 +59,7 @@ export const Locations = () => {
     e.preventDefault();
 
     const city = {
-      id: uuidv4(),
-      cityOrder: cityOrder,
+      locationNumber: locationNumber,
       city: location,
     };
 
@@ -68,7 +67,7 @@ export const Locations = () => {
   };
 
   const deleteCity = (id) => {
-    const updatedCities = cities.filter((city) => city.id !== id);
+    const updatedCities = cities.filter((city) => city.locationNumber !== id);
     setCities(updatedCities);
   };
 
@@ -81,10 +80,9 @@ export const Locations = () => {
       />
       {cities.map((city) => (
         <Row
-          key={city.id}
-          id={city.id}
+          key={city.locationNumber}
           city={city.city}
-          cityOrder={city.cityOrder}
+          locationNumber={city.locationNumber}
           deleteCity={deleteCity}
         />
       ))}

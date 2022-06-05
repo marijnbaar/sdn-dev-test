@@ -3,15 +3,15 @@ import { ReactComponent as PlusIcon } from "../assets/svg/plus.svg";
 export const AddLocation = ({
   handleSubmitCity,
   city,
-  cityOrder,
+  locationNumber,
   handleChangeKey,
   handleChangeValue,
 }) => (
   <div className="m-11">
     <form className="flex justify-between w-full" onSubmit={handleSubmitCity}>
       <input
-        name="location"
-        value={cityOrder}
+        name="locationNumber"
+        value={locationNumber}
         className="flex-1 rounded shadow p-2 text-grey-dark mr-2"
         onChange={handleChangeKey}
       />
