@@ -1,17 +1,16 @@
 import { Row } from "./Row";
 import { useState } from "react";
-import { AddLocation } from "./AddLocation";
+
+import AddLocation from "./AddLocation";
 
 const capitalCities = require("../locations.json");
 
 export const Locations = () => {
   const [cities, setCities] = useState([]);
-  const [location, setLocation] = useState("");
-  const [locationNumber, setLocationNumber] = useState("");
+  const [location, setValueInput] = useState("");
+  const [locationNumber, setKeyInput] = useState("");
   const [result, setResult] = useState([]);
   const [json, setJson] = useState({});
-  const [locationValueVars, setLocationValueVars] = useState("");
-  const [locationKeyVars, setLocationKeyVars] = useState("");
   const [newCapitalCities, setNewCapitalCities] = useState("");
 
   const mapResult = (locationNumber, location) => {
@@ -48,39 +47,18 @@ export const Locations = () => {
     setResult(updatedResult);
   };
 
-  const handleChangeKeyInput = (e) => {
-    setLocationNumber(e.target.value);
-  };
-
-  const handleChangeValueInput = (e) => {
-    setLocation(e.target.value);
-  };
-
-  const handleChangeKeyVars = (e) => {
-    setLocationKeyVars(e.target.value);
-  };
-
-  const handleChangeValueVars = (e) => {
-    setLocationValueVars(e.target.value);
-  };
-
-  const handleSubmitVars = (e) => {
-    e.preventDefault();
-    capitalCities[locationKeyVars] = locationValueVars;
-
-    const updatedCapitalCities = { ...capitalCities };
-    setNewCapitalCities(updatedCapitalCities);
-  };
-
-  const handleSubmitInput = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const city = {
       locationNumber: locationNumber,
       city: location,
     };
-
     handleAddLocation(city);
+
+    capitalCities[locationNumber] = location;
+    const updatedCapitalCities = { ...capitalCities };
+    setNewCapitalCities(updatedCapitalCities);
   };
 
   const deleteLocation = (id) => {
@@ -101,11 +79,9 @@ export const Locations = () => {
       <div className="flex flex-col">
         <h2 className="p-4">Input</h2>
         <AddLocation
-          handleChangeKey={handleChangeKeyInput}
-          handleChangeValue={handleChangeValueInput}
-          handleSubmit={handleSubmitInput}
-          setLocation={setLocation}
-          setLocationNumber={setLocationNumber}
+          handleSubmit={handleSubmit}
+          setValueInput={setValueInput}
+          setKeyInput={setKeyInput}
         />
         {cities.map((city) => (
           <Row
@@ -119,9 +95,9 @@ export const Locations = () => {
       <div className="flex flex-col">
         <h2 className="p-4">Vars</h2>
         <AddLocation
-          handleChangeKey={handleChangeKeyVars}
-          handleChangeValue={handleChangeValueVars}
-          handleSubmit={handleSubmitVars}
+          handleSubmit={handleSubmit}
+          setValueInput={setValueInput}
+          setKeyInput={setKeyInput}
         />
 
         <div>
