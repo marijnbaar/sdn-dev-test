@@ -2,14 +2,17 @@ import { Row } from "./Row";
 import { useState } from "react";
 import { AddLocation } from "./AddLocation";
 
-import { capitalCities } from "../locations";
+const capitalCities = require("../locations.json");
 
 export const Locations = () => {
   const [cities, setCities] = useState([]);
   const [location, setLocation] = useState("");
   const [locationNumber, setLocationNumber] = useState("");
   const [result, setResult] = useState([]);
-  const [object, setObject] = useState({});
+  const [json, setJson] = useState({});
+  const [locationValueVars, setLocationValueVars] = useState("");
+  const [locationKeyVars, setLocationKeyVars] = useState("");
+  const [newCapitalCities, setNewCapitalCities] = useState("");
 
   const mapResult = (locationNumber, location) => {
     //checken of het eerste teken een dollarteken is
@@ -28,27 +31,45 @@ export const Locations = () => {
   };
 
   const convertResult = (updatedResult) => {
-    let object = updatedResult.reduce(
+    let json = updatedResult.reduce(
       (json, item) => ({ ...json, [item.locationNumber]: item.location }),
       {}
     );
-    setObject(object);
+    setJson(json);
   };
-  const handleAddCity = (city) => {
+
+  const handleAddLocation = (city) => {
     const updatedCities = [...cities, city];
     setCities(updatedCities);
+
     const res = mapResult(locationNumber, location);
     const updatedResult = [...result, res];
     convertResult(updatedResult);
     setResult(updatedResult);
   };
 
-  const handleChangeKey = (e) => {
+  const handleChangeKeyInput = (e) => {
     setLocationNumber(e.target.value);
   };
 
-  const handleChangeValue = (e) => {
+  const handleChangeValueInput = (e) => {
     setLocation(e.target.value);
+  };
+
+  const handleChangeKeyVars = (e) => {
+    setLocationKeyVars(e.target.value);
+  };
+
+  const handleChangeValueVars = (e) => {
+    setLocationValueVars(e.target.value);
+  };
+
+  const handleSubmitVars = (e) => {
+    e.preventDefault();
+    capitalCities[locationKeyVars] = locationValueVars;
+
+    const updatedCapitalCities = { ...capitalCities };
+    setNewCapitalCities(updatedCapitalCities);
   };
 
   const handleSubmitInput = (e) => {
@@ -59,13 +80,15 @@ export const Locations = () => {
       city: location,
     };
 
-    handleAddCity(city);
+    handleAddLocation(city);
   };
 
-  const deleteCity = (id) => {
+  const deleteLocation = (id) => {
+    delete capitalCities[id];
+
     const updatedCities = cities.filter((city) => city.locationNumber !== id);
     const updatedInput = result.filter(
-      (location) => location.locationNumber !== id
+      (location, id) => location.locationNumber !== id
     );
     setCities(updatedCities);
     setResult(updatedInput);
@@ -74,36 +97,46 @@ export const Locations = () => {
   return (
     <div className="flex flex-row">
       <div className="flex flex-col">
+        <h2 className="p-4">Input</h2>
         <AddLocation
-          handleChangeKey={handleChangeKey}
-          handleChangeValue={handleChangeValue}
-          handleSubmitInput={handleSubmitInput}
+          handleChangeKey={handleChangeKeyInput}
+          handleChangeValue={handleChangeValueInput}
+          handleSubmit={handleSubmitInput}
+          setLocation={setLocation}
+          setLocationNumber={setLocationNumber}
         />
         {cities.map((city) => (
           <Row
             key={city.locationNumber}
-            city={city.city}
-            locationNumber={city.locationNumber}
-            deleteCity={deleteCity}
+            value={city.city}
+            keys={city.locationNumber}
+            deleteLocation={deleteLocation}
           />
         ))}
       </div>
       <div className="flex flex-col">
+        <h2 className="p-4">Vars</h2>
         <AddLocation
-          handleChangeKey={handleChangeKey}
-          handleChangeValue={handleChangeValue}
-          handleSubmitInput={handleSubmitInput}
+          handleChangeKey={handleChangeKeyVars}
+          handleChangeValue={handleChangeValueVars}
+          handleSubmit={handleSubmitVars}
         />
-        {cities.map((city) => (
-          <Row
-            key={city.locationNumber}
-            city={city.city}
-            locationNumber={city.locationNumber}
-            deleteCity={deleteCity}
-          />
-        ))}
+
+        <div>
+          {Object.keys(capitalCities).map((key, i) => (
+            <Row
+              key={i}
+              value={capitalCities[key]}
+              keys={key}
+              deleteLocation={deleteLocation}
+            />
+          ))}
+        </div>
       </div>
-      {JSON.stringify(object)}
+      <div>
+        <h2 className="p-4">Output</h2>
+        <pre className="p-6">{JSON.stringify(json, null, 4)}</pre>
+      </div>
     </div>
   );
 };

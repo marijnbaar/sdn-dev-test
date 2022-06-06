@@ -1,14 +1,14 @@
 import { ReactComponent as PlusIcon } from "../assets/svg/plus.svg";
 
 export const AddLocation = ({
-  handleSubmitInput,
+  handleSubmit,
   city,
   locationNumber,
   handleChangeKey,
   handleChangeValue,
 }) => (
   <div className="m-2">
-    <form className="flex justify-between w-full" onSubmit={handleSubmitInput}>
+    <form className="flex justify-between w-full" onSubmit={handleSubmit}>
       <input
         name="locationNumber"
         value={locationNumber}
