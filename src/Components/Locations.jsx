@@ -84,14 +84,16 @@ export const Locations = () => {
   };
 
   const deleteLocation = (id) => {
+    let deletedCity = capitalCities[id];
     delete capitalCities[id];
-
+    const updateInput = cities.filter((city) => city.city !== deletedCity);
     const updatedCities = cities.filter((city) => city.locationNumber !== id);
-    const updatedInput = result.filter(
+    const updatedResult = result.filter(
       (location, id) => location.locationNumber !== id
     );
+    setCities(updateInput);
     setCities(updatedCities);
-    setResult(updatedInput);
+    setResult(updatedResult);
   };
 
   return (
