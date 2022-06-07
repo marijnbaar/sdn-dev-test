@@ -1,6 +1,12 @@
 import { ReactComponent as PlusIcon } from "../assets/svg/plus.svg";
 
-const AddLocation = ({ handleSubmit, setKeyInput, setValueInput }) => {
+const AddLocation = ({
+  handleSubmit,
+  setKeyInput,
+  setValueInput,
+  city,
+  locationNumber,
+}) => {
   const handleChangeKey = (e) => {
     setKeyInput(e.target.value);
   };
@@ -13,12 +19,14 @@ const AddLocation = ({ handleSubmit, setKeyInput, setValueInput }) => {
       <div className="m-2">
         <form className="flex justify-between w-full" onSubmit={handleSubmit}>
           <input
-            name="key"
+            name="locationNumber"
+            value={locationNumber}
             className="flex rounded shadow p-2 text-grey-dark mr-2"
             onChange={handleChangeKey}
           />
           <input
-            name="value"
+            name="location"
+            value={city}
             className="flex rounded shadow p-2 text-grey-dark mr-2"
             onChange={handleChangeValue}
           />
